@@ -140,7 +140,15 @@ void display(){
 ////////circuito
 	desenhaCirculo(maior.xy[0],maior.xy[1],360,maior.raio,maior.rgb[0],maior.rgb[1],maior.rgb[2]);
 	desenhaCirculo(menor.xy[0],menor.xy[1],360,menor.raio,menor.rgb[0],menor.rgb[1],menor.rgb[2]);
+
 //// fodendo gamb pra contar voltas
+	check[0].altura = maior.raio-menor.raio;
+	check[0].largura = 5;
+	check[1].altura = 5;
+	check[1].largura = maior.raio-menor.raio;
+	check[2].altura = maior.raio-menor.raio;
+	check[3].largura = 5;
+
 	glPushMatrix();
 			glTranslatef(menor.xy[0],menor.raio+menor.xy[1],0);
 			desenhaQuadrilatero(maior.raio-menor.raio,5,0,1,0);
@@ -153,6 +161,7 @@ void display(){
 			glTranslatef(menor.xy[0],menor.xy[1]-(2.33*menor.raio),0);
 			desenhaQuadrilatero(maior.raio-menor.raio,5,0,1,0);
 	glPopMatrix();
+
 ////////linha de largada
 	glPushMatrix();
 		glTranslatef(rect.xy[0] + rect.largura/2,rect.xy[1],0 );
@@ -204,13 +213,13 @@ void desenhaCarrito(){
 
 ///////////colisao
 		if (inicio==0){
-		glPushMatrix();
+		
 			desenhaCirculo(0,0,360,player.raio,1,1,1);
-		glPopMatrix();
+		
 		}else{
-		glPushMatrix();
+		
 			circuloSemCor(0,0,360,player.raio);
-		glPopMatrix();
+		
 		}
 		glRotatef(angCarro,0,0,1);
 		glRotatef(90,0,0,1);
@@ -676,14 +685,46 @@ void Timer(int value)
 
 	float dCos =cos(((angCarro*M_PI)/180.0));
 	float dSin =sin(((angCarro*M_PI)/180.0));
-	//tiro_Inimigo.push_back(novo_tiro_Inimigo());
-	if(enemyIsNear(enm1.xy[0],enm1.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) >= distEnemy)
-		flagEnemy[0]=0;
-	if(enemyIsNear(enm2.xy[0],enm2.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) >= distEnemy)
-		flagEnemy[1]=0;
-	if(enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) >= distEnemy)
-		flagEnemy[2]=0;
-	glutPostRedisplay();
-	glutTimerFunc(20000,Timer, 1);
+	if(value == 1){
+		if(enemyIsNear(enm1.xy[0],enm1.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) >= distEnemy)
+			flagEnemy[0]=0;
+		if(enemyIsNear(enm2.xy[0],enm2.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) >= distEnemy)
+			flagEnemy[1]=0;
+		if(enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) >= distEnemy)
+			flagEnemy[2]=0;	
+		glutPostRedisplay();
+		glutTimerFunc(20000,Timer, 1);
+	}
+	if(value == 2){
+		//tiro_Inimigo.push_back(novo_tiro_Inimigo());
+		glutPostRedisplay();
+		glutTimerFunc(331,Timer, 2);
+	}
+	if(value == 3){
+		moveInimigo();
+		glutPostRedisplay();
+		glutTimerFunc(10,Timer,3);
+	}
+	
+}
 
+float distEnem(int ox, int oy){
+	return sqrt( (maior.xy[0] - ox )*(maior.xy[0] - ox ) + (maior.xy[1] - oy)*(maior.xy[1] - oy ) );
+}
+void moveInimigo(){
+
+	float distMin = menor.raio + enm1.raio;
+	float distMax = maior.raio - enm1.raio;
+	float distEnemy = player.raio + enm1.raio;
+
+	if(distEnem(enm1.xy[0],enm1.xy[1]+1) < distMin || distEnem(enm1.xy[0],enm1.xy[1]-1) > distMax){
+		passoEnm[0]= - passoEnm[0];}
+	else if(distEnem(enm2.xy[0]+1,enm2.xy[1]) < distMin || distEnem(enm2.xy[0]-1,enm2.xy[1]) > distMax){
+		passoEnm[1]= - passoEnm[1];}
+	else if(distEnem(enm3.xy[0],enm3.xy[1]+1) < distMin || distEnem(enm3.xy[0],enm3.xy[1]-1) > distMax){
+		passoEnm[2]= - passoEnm[2];}
+
+		enm1.xy[1] += passoEnm[0];
+		enm2.xy[0] += passoEnm[1];
+		enm3.xy[1] += passoEnm[2];
 }

@@ -24,7 +24,7 @@ typedef struct{
 typedef struct{
         quad chassi;
         quad rodas[4];
-	quad eixos[2];
+		quad eixos[2];
         quad farois[4];
         quad canhao;
 }car;
@@ -44,6 +44,7 @@ std::vector<tiro> tiro_Inimigo;
 circ maior, menor, enm1, enm2, enm3, player;
 car carrito;
 quad rect;
+quad check[3];
 
 int flagEnemy[3];
 
@@ -75,6 +76,7 @@ int angCarro = -90;
 int angCan = -90;
 int reseta =0;
 int passo = 10;
+int passoEnm[3] = {1,1,1};
 int xIni = 0;
 
 void init();
@@ -103,4 +105,6 @@ void DesenhaTexto(void *font, char *string);
 void DesenhaTextoStroke(void *font, char *string);
 void desenhaCarrito(void);
 void resetaPosCarrito(void);
+void moveInimigo();
+float distEnem(int ox, int oy);
 void teste(void);

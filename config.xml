@@ -1,5 +1,5 @@
 <aplicacao>
-     <arquivoDaArena nome="arena" tipo="svg" caminho="/home/gabriel/Área de Trabalho/cg/4trab/"></arquivoDaArena>
+     <arquivoDaArena nome="arena" tipo="svg" caminho="/home/thaylo/git-repos/4carrito/"></arquivoDaArena>
     <carro velTiro="10.2"></carro>
     <inimigo freqTiro="0.0001" velInimigo="0.1" velTiro="0.3"></inimigo>
 </aplicacao>
