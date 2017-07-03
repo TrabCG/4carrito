@@ -8,6 +8,7 @@
 #include <cmath>
 #include <stdlib.h>
 
+
 typedef struct{
         float xy[2];
         float rgb[3];
@@ -44,7 +45,7 @@ std::vector<tiro> tiro_Inimigo;
 circ maior, menor, enm1, enm2, enm3, player;
 car carrito;
 quad rect;
-quad check[3];
+
 
 int flagEnemy[3];
 

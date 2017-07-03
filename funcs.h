@@ -19,10 +19,10 @@ void init()
 	printf("\n--------------------Para testar o placar é so presionar V-------------------\n");
 	printf("\n----------------------------------------------------------------------------\n");
     //Selecionar cor de fundo preto
-    	glMatrixMode(GL_PROJECTION);
+    	//glMatrixMode(GL_PROJECTION);
     	glClearColor( 1, 1, 1, 0.0 );
 		glLoadIdentity();
-		glMatrixMode(GL_MODELVIEW);
+		//glMatrixMode(GL_MODELVIEW);
     	gluOrtho2D(left,right,roof,ceiling);//2
         for (int i =0;i<256;i++)
         	teclas[i]=0;
@@ -38,49 +38,50 @@ void display(){
 	teste();
 	if (inicio ==0){
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glColor3f(1,1,1);
+		//glPushMatrix();
+			desenhaCarrito();
+		//glPopMatrix();
 		glPushMatrix();	
-		glTranslatef(menor.xy[0]-(1.7*menor.raio),menor.xy[1]+menor.raio,0);
-		glScalef(0.3, 0.3, 0.3); // diminui o tamanho do fonte
-		//glRotatef(15, 0,0,1); // rotaciona o texto
-		glLineWidth(2); // define a espessura da linha
-		DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Bem Vindo ao jogo do ");
+			glColor3f(1,1,1);
+			glTranslatef(menor.xy[0]-(1.7*menor.raio),menor.xy[1]+menor.raio,0);
+			glScalef(0.3, 0.3, 0.3); // diminui o tamanho do fonte
+			//glRotatef(15, 0,0,1); // rotaciona o texto
+			glLineWidth(2); // define a espessura da linha
+			DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Bem Vindo ao jogo do ");
 		glPopMatrix();
 		glPushMatrix();
-		glTranslatef(menor.xy[0]-80,menor.xy[1],0);
-		glScalef(0.3, 0.3, 0.3);
-		DesenhaTextoStroke(GLUT_STROKE_ROMAN,"CARRITO");
-		glPopMatrix();
-		glPushMatrix();
-		glColor3f(1,0,0);
-		glTranslatef(menor.xy[0]-(1.5*menor.raio),maior.xy[1]-menor.raio,0);
-		glScalef(0.3, 0.3, 0.3);
-		DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Press ENTER to start!");
+			glTranslatef(menor.xy[0]-80,menor.xy[1],0);
+			glScalef(0.3, 0.3, 0.3);
+			DesenhaTextoStroke(GLUT_STROKE_ROMAN,"CARRITO");
+			glPopMatrix();
+			glPushMatrix();
+			glColor3f(1,0,0);
+			glTranslatef(menor.xy[0]-(1.5*menor.raio),maior.xy[1]-menor.raio,0);
+			glScalef(0.3, 0.3, 0.3);
+			DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Press ENTER to start!");
 		glPopMatrix();
 
 		// Posição no universo onde o texto bitmap será colocado 
 		
-		glColor3f(0,0,1);
 		glPushMatrix();
-		 // diminui o tamanho do fonte
-		//glRotatef(15, 0,0,1); // rotaciona o texto
-		//glRasterPos2f(menor.xy[0]-(1*menor.raio),maior.xy[1]-maior.raio+30); 
-	    glTranslatef(menor.xy[0]-200,maior.xy[1]-maior.raio+30,0);
-	    glScalef(0.2, 0.2, 0.2);
-		DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Developed by Thayloso e Ipatinga");
+			glColor3f(0,0,1);
+			 // diminui o tamanho do fonte
+			//glRotatef(15, 0,0,1); // rotaciona o texto
+			//glRasterPos2f(menor.xy[0]-(1*menor.raio),maior.xy[1]-maior.raio+30); 
+		    glTranslatef(menor.xy[0]-200,maior.xy[1]-maior.raio+30,0);
+		    glScalef(0.2, 0.2, 0.2);
+			DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Developed by Thayloso e Ipatinga");
 		glPopMatrix();
 		//desenhaCarrito();
 		// Exibe o desenha na janela
-		glPushMatrix();
-			desenhaCarrito();
-		glPopMatrix();
+		
 		cria_tiro();
 		if(teclas[13]==true){
 			inicio=1;
 			reseta=0;
 		}
 		//glutSwapBuffers();
-		glutPostRedisplay();
+		//glutPostRedisplay();
 	}else if(fim==1){
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glColor3f(1,0,0);
@@ -89,7 +90,7 @@ void display(){
 	    glScalef(0.6, 0.6, 0.6);
 		DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Se Fodeu!");
 		glPopMatrix();
-		fim=0;
+		//fim=0;
 	}else if(win==1){
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glColor3f(1,0,0);
@@ -98,7 +99,7 @@ void display(){
 	    glScalef(0.6, 0.6, 0.6);
 		DesenhaTextoStroke(GLUT_STROKE_ROMAN,"GGWP FION!");
 		glPopMatrix();
-		win=0;
+		//win=0;
 	}else if(inicio !=0 && fim ==0 && win ==0){
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	//placar que marca a quantidade de voltas que o fodendo player deu
@@ -142,12 +143,6 @@ void display(){
 	desenhaCirculo(menor.xy[0],menor.xy[1],360,menor.raio,menor.rgb[0],menor.rgb[1],menor.rgb[2]);
 
 //// fodendo gamb pra contar voltas
-	check[0].altura = maior.raio-menor.raio;
-	check[0].largura = 5;
-	check[1].altura = 5;
-	check[1].largura = maior.raio-menor.raio;
-	check[2].altura = maior.raio-menor.raio;
-	check[3].largura = 5;
 
 	glPushMatrix();
 			glTranslatef(menor.xy[0],menor.raio+menor.xy[1],0);
@@ -189,15 +184,14 @@ void display(){
 }
 
 void teste(){
-	if(teclas['i']==true)
+	/*if(teclas['i']==true)
 		inicio=0;
 	if(teclas['g']==true)
 		win=1;
 	if(teclas['l']==true)
 		fim=1;		
 	if(teclas['v']==true)
-		numVoltas+=1;
-}
+		numVoltas+=1;*/}
 void resetaPosCarrito(){
 	 dx = 0;
 	 dy = 0;
@@ -212,15 +206,9 @@ void desenhaCarrito(){
 		glTranslatef(player.xy[0],player.xy[1],0);
 
 ///////////colisao
-		if (inicio==0){
-		
-			desenhaCirculo(0,0,360,player.raio,1,1,1);
-		
-		}else{
-		
-			circuloSemCor(0,0,360,player.raio);
-		
-		}
+		if (inicio==0)desenhaCirculo(0,0,360,player.raio,1,1,1);
+		else circuloSemCor(0,0,360,player.raio);
+
 		glRotatef(angCarro,0,0,1);
 		glRotatef(90,0,0,1);
 
@@ -308,7 +296,7 @@ void desenhaCarrito(){
 		glPushMatrix();
 			desenhaQuadrilatero( carrito.chassi.altura, carrito.chassi.largura/2, 0, 0, 0);
 		glPopMatrix();
-
+glPopMatrix();
 }
 
 void desenhaCirculo(GLint x, GLint y, int linhas, int raio, float r, float g, float b){
@@ -412,6 +400,7 @@ void keyOperations (void) {
 			&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy){		
 				dx-=6*dCos;
 				dy-=6*dSin;
+				contaVoltas();
 				if(angRoda > -90) angCarro+=5;
 				if(angRoda < -90) angCarro-=5;
 				frlR = 1;
@@ -421,6 +410,7 @@ void keyOperations (void) {
 			&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy){		
 				dx-=6*dCos;
 				dy-=6*dSin;
+				contaVoltas();
 				if(angRoda > -90) angCarro+=5;
 				if(angRoda < -90) angCarro-=5;
 				frlR = 1;
@@ -430,6 +420,7 @@ void keyOperations (void) {
 			&& enemyIsNear(enm2.xy[0],enm2.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy){		
 				dx-=6*dCos;
 				dy-=6*dSin;
+				contaVoltas();
 				if(angRoda > -90) angCarro+=5;
 				if(angRoda < -90) angCarro-=5;
 				frlR = 1;
@@ -440,6 +431,7 @@ void keyOperations (void) {
 				&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy){		
 				dx-=6*dCos;
 				dy-=6*dSin;
+				contaVoltas();
 				if(angRoda > -90) angCarro+=5;
 				if(angRoda < -90) angCarro-=5;
 				frlR = 1;
@@ -453,6 +445,7 @@ void keyOperations (void) {
 			&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy){
 				dx+=2*dCos;
 			  	dy+=2*dSin;
+			  	contaVoltas();
 				if(angRoda < -90) angCarro+=3;
 				if(angRoda > -90) angCarro-=3;
 				frltR = 1;
@@ -462,6 +455,7 @@ void keyOperations (void) {
 			&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy){
 				dx+=2*dCos;
 			  	dy+=2*dSin;
+			  	contaVoltas();
 				if(angRoda < -90) angCarro+=3;
 				if(angRoda > -90) angCarro-=3;
 				frltR = 1;
@@ -471,6 +465,7 @@ void keyOperations (void) {
 			&& enemyIsNear(enm1.xy[0],enm1.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy){
 				dx+=2*dCos;
 			  	dy+=2*dSin;
+			  	contaVoltas();
 				if(angRoda < -90) angCarro+=3;
 				if(angRoda > -90) angCarro-=3;
 				frltR = 1;
@@ -481,6 +476,7 @@ void keyOperations (void) {
 				&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy){
 				dx+=2*dCos;
 			  	dy+=2*dSin;
+			  	contaVoltas();
 				if(angRoda < -90) angCarro+=3;
 				if(angRoda > -90) angCarro-=3;
 				frltR = 1;
@@ -646,6 +642,32 @@ void remove_tiro(int i){
 	}
 }
 void contaVoltas(){
+	if( (player.xy[1]+dy > maior.xy[1]) && (player.xy[0]+dx < maior.xy[0]) &&sqm[0]==0){
+		sqm[0]=1;
+		printf("\n flag 0 ativo com %i \n",sqm[0]);
+	}else if ( (player.xy[1]+dy < maior.xy[1])  &&  (player.xy[0]+dx < maior.xy[0]) && sqm[0]==1 && sqm[1]==0){
+		sqm[1]=1;
+		printf("\n flag 1 ativo com %i \n",sqm[1]);
+	}else if ( (player.xy[1]+dy < maior.xy[1])  &&  (player.xy[0]+dx > maior.xy[0]) && sqm[0]==1 && sqm[1]==1 && sqm[2]==0){
+		sqm[2]=1;
+		printf("\n flag 2 ativo com %i \n",sqm[2]);
+	}else if ( (player.xy[1]+dy > maior.xy[1])  &&  (player.xy[0]+dx > maior.xy[0]) && sqm[0]==1 && sqm[1]==1 && sqm[2]==1){
+		numVoltas+=1;
+		if(numVoltas==5)
+			win=1;
+		for(int i=0;i<3;i++)
+				sqm[i]=0;
+	}else if ( (player.xy[1]+dy > maior.xy[1])  &&  (player.xy[0]+dx > maior.xy[0]) && (sqm[0]==1 || sqm[1]==1 || sqm[2]==1) ){
+		for(int i=0;i<3;i++)
+				sqm[i]=0;
+		printf("\n Valor do Flag 0 retado pra %i \n",sqm[0]);
+		printf("\n Valor do Flag 1 retado pra %i \n",sqm[1]);
+		printf("\n Valor do Flag 2 retado pra %i \n",sqm[2]);
+	}
+	
+
+
+
 /*	if(se o carrito passar dentro do ret verde && sqm[0]==0)
 		sqm[0]=1;
 	else sqm[0]=0;
