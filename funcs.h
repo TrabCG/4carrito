@@ -542,8 +542,8 @@ void passiveMotion(int x, int y){
 
 tiro novo_tiro(void){
     tiro t;
-		t.speed = velTiro;
-		t.raio = player.raio*1/10;
+	t.speed = velTiro;
+	t.raio = player.raio*1/10;
     t.angulo = angCarro + (angCan)+270;
     t.x = dx - cos(angCarro*M_PI/180.0)*(carrito.chassi.altura/2) + cos((t.angulo)*M_PI/180.0)*carrito.canhao.altura;
     t.y = dy - sin(angCarro*M_PI/180.0)*(carrito.chassi.altura/2) + sin((t.angulo)*M_PI/180.0)*carrito.canhao.altura;
@@ -552,13 +552,13 @@ tiro novo_tiro(void){
 
 tiro novo_tiro_Inimigo(void){
     tiro t;
-	t.speed = 30;
+	t.speed = velTiro;
 	t.raio = player.raio*1/10;
-	t.angulo = angCarro -220 ;
-	//t.x = enm1.xy[0];
-	//t.y = enm1.xy[1];
-    t.x =  cos(angCarro*M_PI/180.0)*(carrito.chassi.altura/2) + cos((t.angulo)*M_PI/180.0);
-    t.y =  sin(angCarro*M_PI/180.0)*(carrito.chassi.altura/2) + sin((t.angulo)*M_PI/180.0);
+	float r = distEnem_Player(enm1.xy[0],enm1.xy[1]);
+	t.cosI = (player.xy[0] - enm1.xy[0]) / r;
+	t.senI = (player.xy[1] - enm1.xy[1]) / r;
+    t.x =  enm1.xy[0] + (t.cosI*enm1.raio);
+    t.y =  enm1.xy[1] + (t.senI*enm1.raio);
     return t;
 }
 
@@ -601,10 +601,10 @@ void cria_tiro_Inimigo(void){
                 desenhaCirculo(enm1.xy[0],enm1.xy[1],360,tiro_Inimigo[i].raio,0,1,0);
             glPopMatrix();
             //caminho que os tiros vao seguir
-           	tiro_Inimigo[i].x += cos((tiro_Inimigo[i].angulo-angCarro) * M_PI / 180.0)*tiro_Inimigo[i].speed;
-          	tiro_Inimigo[i].y += sin((tiro_Inimigo[i].angulo-angCarro) * M_PI / 180.0)*tiro_Inimigo[i].speed;
-            
-  			//remove_tiro(i);
+           	tiro_Inimigo[i].x += 10;//tiro_Inimigo[i].speed*tiro_Inimigo[i].cosI;
+          	tiro_Inimigo[i].y += 10;//tiro_Inimigo[i].speed*tiro_Inimigo[i].senI;
+          	
+  			//remove_tiroInimigo(i);
         }
     }
     glutPostRedisplay();      
@@ -615,9 +615,6 @@ void remove_tiro(int i){
 	float distMin = menor.raio + tiros[i].raio;
 	float distMax = maior.raio - tiros[i].raio;
 	float distEnemy = tiros[i].raio + enm1.raio;
-
-	float dCos =cos((tiros[i].angulo*M_PI)/180.0);
-	float dSin =sin((tiros[i].angulo*M_PI)/180.0);
 
 	float tx = tiros[i].x+player.xy[0] -dx;
 	float ty = tiros[i].y+player.xy[1]-dy;
@@ -641,6 +638,23 @@ void remove_tiro(int i){
 		}
 	}
 }
+
+void remove_tiroInimigo(int i){
+
+	float distMin = menor.raio + tiro_Inimigo[i].raio;
+	float distMax = maior.raio - tiro_Inimigo[i].raio;
+	float distEnemy = tiro_Inimigo[i].raio + enm1.raio;
+
+	float tx = tiro_Inimigo[i].x+enm1.xy[0];
+	float ty = tiro_Inimigo[i].y+enm1.xy[1];
+	
+	if(inicio!=0){
+		if(distPlayer(tx,ty) < distMin || distPlayer(tx,ty) > distMax)
+			tiro_Inimigo.erase(tiro_Inimigo.begin()+i);
+	}
+	
+}
+
 void contaVoltas(){
 	if( (player.xy[1]+dy > maior.xy[1]) && (player.xy[0]+dx < maior.xy[0]) &&sqm[0]==0){
 		sqm[0]=1;
@@ -718,7 +732,7 @@ void Timer(int value)
 		glutTimerFunc(20000,Timer, 1);
 	}
 	if(value == 2){
-		//tiro_Inimigo.push_back(novo_tiro_Inimigo());
+		tiro_Inimigo.push_back(novo_tiro_Inimigo());
 		glutPostRedisplay();
 		glutTimerFunc(331,Timer, 2);
 	}
@@ -733,6 +747,12 @@ void Timer(int value)
 float distEnem(int ox, int oy){
 	return sqrt( (maior.xy[0] - ox )*(maior.xy[0] - ox ) + (maior.xy[1] - oy)*(maior.xy[1] - oy ) );
 }
+
+
+float distEnem_Player(int ox, int oy){
+	return sqrt( (player.xy[0] - ox )*(player.xy[0] - ox ) + (player.xy[1] - oy)*(player.xy[1] - oy ) );
+}
+
 void moveInimigo(){
 
 	float distMin = menor.raio + enm1.raio;
