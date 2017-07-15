@@ -36,13 +36,17 @@ typedef struct{
 	float angulo;
 	float raio;
 	float speed;
-    float cosI;
-    float senI;
+    float cosseno;
+    float seno;
+    float r;
 }tiro;
 
 std::vector<tiro> tiros;
 
-std::vector<tiro> tiro_Inimigo;
+std::vector<tiro> tiro_Inimigo1;
+std::vector<tiro> tiro_Inimigo2;
+std::vector<tiro> tiro_Inimigo3;
+
 
 circ maior, menor, enm1, enm2, enm3, player;
 car carrito;
@@ -50,7 +54,6 @@ quad rect;
 
 
 int flagEnemy[3];
-
 int numVoltas = 0;
 float frlR;
 float frlG;
@@ -81,7 +84,7 @@ int reseta =0;
 int passo = 10;
 int passoEnm[3] = {1,1,1};
 int xIni = 0;
-
+int flagmalandro=0;
 void init();
 void display();
 void desenhaEixo();
@@ -100,8 +103,12 @@ tiro novo_tiro(void);
 void cria_tiro(void);
 void remove_tiro(int i);
 void remove_tiroInimigo(int i);
-tiro novo_tiro_Inimigo(void);
-void cria_tiro_Inimigo(void);
+tiro novo_tiro_Inimigo2(void);
+tiro novo_tiro_Inimigo1(void);
+tiro novo_tiro_Inimigo3(void);
+void cria_tiro_Inimigo1(void);
+void cria_tiro_Inimigo2(void);
+void cria_tiro_Inimigo3(void);
 void Timer(int value);
 void placar(int altura, int largura, float r, float g, float b);
 void contaVoltas(void);
@@ -113,3 +120,6 @@ void moveInimigo();
 float distEnem(int ox, int oy);
 float distEnem_Player(int ox, int oy);
 void teste(void);
+float distTiro(int oxPlayer, int oyPlayer);
+void remove_tiroInimigo2(int i);
+void remove_tiroInimigo3(int i);

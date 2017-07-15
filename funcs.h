@@ -21,7 +21,7 @@ void init()
     //Selecionar cor de fundo preto
     	//glMatrixMode(GL_PROJECTION);
     	glClearColor( 1, 1, 1, 0.0 );
-		glLoadIdentity();
+		//glLoadIdentity();
 		//glMatrixMode(GL_MODELVIEW);
     	gluOrtho2D(left,right,roof,ceiling);//2
         for (int i =0;i<256;i++)
@@ -171,7 +171,9 @@ void display(){
 
 	glPopMatrix();
 	cria_tiro();
-	cria_tiro_Inimigo();
+	cria_tiro_Inimigo1();
+	cria_tiro_Inimigo2();
+	cria_tiro_Inimigo3();
 ////////"inimigos"
 	if (flagEnemy[0]==0)
 		desenhaCirculo(enm1.xy[0],enm1.xy[1],360,enm1.raio,enm1.rgb[0],enm1.rgb[1],enm1.rgb[2]);
@@ -394,6 +396,9 @@ void keyOperations (void) {
 	
 	}else{
 	if (teclas['w']==true || teclas['W']==true){
+		frlR = 1;
+		frlG = 1;
+		frlB = 1;
 		if(distPlayer(player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distMin && 
 		distPlayer(player.xy[0]-6*dCos,player.xy[1]-6*dSin) < distMax) {
 			if(flagEnemy[0]==1	&& enemyIsNear(enm2.xy[0],enm2.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy
@@ -403,9 +408,6 @@ void keyOperations (void) {
 				contaVoltas();
 				if(angRoda > -90) angCarro+=5;
 				if(angRoda < -90) angCarro-=5;
-				frlR = 1;
-				frlG = 1;
-				frlB = 1;
 			}else if(flagEnemy[1]==1 && enemyIsNear(enm1.xy[0],enm1.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy
 			&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy){		
 				dx-=6*dCos;
@@ -413,9 +415,6 @@ void keyOperations (void) {
 				contaVoltas();
 				if(angRoda > -90) angCarro+=5;
 				if(angRoda < -90) angCarro-=5;
-				frlR = 1;
-				frlG = 1;
-				frlB = 1;
 			}else if(flagEnemy[2]==1 && enemyIsNear(enm1.xy[0],enm1.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy
 			&& enemyIsNear(enm2.xy[0],enm2.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy){		
 				dx-=6*dCos;
@@ -423,9 +422,6 @@ void keyOperations (void) {
 				contaVoltas();
 				if(angRoda > -90) angCarro+=5;
 				if(angRoda < -90) angCarro-=5;
-				frlR = 1;
-				frlG = 1;
-				frlB = 1;
 			}else if((enemyIsNear(enm2.xy[0],enm2.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy) 
 				&& enemyIsNear(enm1.xy[0],enm1.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy
 				&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]-6*dCos,player.xy[1]-6*dSin) > distEnemy){		
@@ -434,12 +430,12 @@ void keyOperations (void) {
 				contaVoltas();
 				if(angRoda > -90) angCarro+=5;
 				if(angRoda < -90) angCarro-=5;
-				frlR = 1;
-				frlG = 1;
-				frlB = 1;
 			}
 		}
   }else if(teclas['s']==true || teclas['S']==true){
+		frltR = 1;
+		frltG = 0;
+		frltB = 0;
 		if(distPlayer(player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distMin && distPlayer(player.xy[0]+2*dCos,player.xy[1]+2*dSin) < distMax){
 			if(flagEnemy[0]==1 && enemyIsNear(enm2.xy[0],enm2.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy
 			&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy){
@@ -448,9 +444,6 @@ void keyOperations (void) {
 			  	contaVoltas();
 				if(angRoda < -90) angCarro+=3;
 				if(angRoda > -90) angCarro-=3;
-				frltR = 1;
-				frltG = 0;
-				frltB = 0;
 			}else if(flagEnemy[1]==1 && enemyIsNear(enm1.xy[0],enm1.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy
 			&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy){
 				dx+=2*dCos;
@@ -458,9 +451,6 @@ void keyOperations (void) {
 			  	contaVoltas();
 				if(angRoda < -90) angCarro+=3;
 				if(angRoda > -90) angCarro-=3;
-				frltR = 1;
-				frltG = 0;
-				frltB = 0;
 			}else if(flagEnemy[2]==1 && enemyIsNear(enm2.xy[0],enm2.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy
 			&& enemyIsNear(enm1.xy[0],enm1.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy){
 				dx+=2*dCos;
@@ -468,9 +458,6 @@ void keyOperations (void) {
 			  	contaVoltas();
 				if(angRoda < -90) angCarro+=3;
 				if(angRoda > -90) angCarro-=3;
-				frltR = 1;
-				frltG = 0;
-				frltB = 0;
 			}else if(enemyIsNear(enm1.xy[0],enm1.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy
 				&& enemyIsNear(enm2.xy[0],enm2.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy
 				&& enemyIsNear(enm3.xy[0],enm3.xy[1],player.xy[0]+2*dCos,player.xy[1]+2*dSin) > distEnemy){
@@ -479,9 +466,6 @@ void keyOperations (void) {
 			  	contaVoltas();
 				if(angRoda < -90) angCarro+=3;
 				if(angRoda > -90) angCarro-=3;
-				frltR = 1;
-				frltG = 0;
-				frltB = 0;
 			}
 		}
   }
@@ -550,16 +534,99 @@ tiro novo_tiro(void){
     return t;
 }
 
-tiro novo_tiro_Inimigo(void){
+
+float distEnem_Player(int ox, int oy){
+	return sqrt( pow( (player.xy[0]+dx) - ox,2) + pow( (player.xy[1]+dy) - oy,2) );
+}
+tiro novo_tiro_Inimigo1(void){
     tiro t;
 	t.speed = velTiro;
 	t.raio = player.raio*1/10;
-	float r = distEnem_Player(enm1.xy[0],enm1.xy[1]);
-	t.cosI = (player.xy[0] - enm1.xy[0]) / r;
-	t.senI = (player.xy[1] - enm1.xy[1]) / r;
-    t.x =  enm1.xy[0] + (t.cosI*enm1.raio);
-    t.y =  enm1.xy[1] + (t.senI*enm1.raio);
+	t.r = distEnem_Player(enm1.xy[0],enm1.xy[1]);
+	t.cosseno = ((player.xy[0]+dx) - enm1.xy[0]) / t.r;
+	t.seno = ((player.xy[1]+dy) - enm1.xy[1]) / t.r;
     return t;
+}
+tiro novo_tiro_Inimigo2(void){
+    tiro t;
+	t.speed = velTiro;
+	t.raio = player.raio*1/10;
+	t.r = distEnem_Player(enm2.xy[0],enm2.xy[1]);
+	t.cosseno = ((player.xy[0]+dx) - enm2.xy[0]) / t.r;
+	t.seno = ((player.xy[1]+dy) - enm2.xy[1]) / t.r;
+    return t;
+}
+tiro novo_tiro_Inimigo3(void){
+    tiro t;
+	t.speed = velTiro;
+	t.raio = player.raio*1/10;
+	t.r = distEnem_Player(enm3.xy[0],enm3.xy[1]);
+	t.cosseno = ((player.xy[0]+dx) - enm3.xy[0]) / t.r;
+	t.seno = ((player.xy[1]+dy) - enm3.xy[1]) / t.r;
+    return t;
+}
+
+void cria_tiro_Inimigo1(void){
+
+    if(!tiro_Inimigo1.empty()){
+        for(int i = 0; i < tiro_Inimigo1.size(); i++){
+            glPushMatrix();
+                glTranslatef(tiro_Inimigo1[i].x, tiro_Inimigo1[i].y, 0);
+                desenhaCirculo(enm1.xy[0],enm1.xy[1],360,tiro_Inimigo1[i].raio,0,1,0);
+                //desenhaCirculo(enm1.xy[0],enm1.xy[1],360,tiro_Inimigo[i].raio,0,1,0);
+            glPopMatrix();
+            //caminho que os tiros vao seguir
+           	tiro_Inimigo1[i].x += tiro_Inimigo1[i].speed*(tiro_Inimigo1[i].cosseno);
+          	tiro_Inimigo1[i].y += tiro_Inimigo1[i].speed*(tiro_Inimigo1[i].seno);
+          	//tiro_Inimigo[i].x += cos((tiro_Inimigo[i].cosseno) * M_PI / 180.0)*tiro_Inimigo[i].speed;
+          	//tiro_Inimigo[i].y += sin((tiro_Inimigo[i].seno) * M_PI / 180.0)*tiro_Inimigo[i].speed;
+          	//printf("caminnho em x do tiro %i =%f\n",i,tiro_Inimigo[i].x);
+          	//printf("caminnho em y do tiro %i =%f\n",i,tiro_Inimigo[i].y);
+
+  			remove_tiroInimigo(i);
+        }
+    }
+    glutPostRedisplay();      
+}
+void cria_tiro_Inimigo2(void){
+
+    if(!tiro_Inimigo2.empty()){
+        for(int i = 0; i < tiro_Inimigo2.size(); i++){
+            glPushMatrix();
+                glTranslatef(tiro_Inimigo2[i].x, tiro_Inimigo2[i].y, 0);
+                desenhaCirculo(enm2.xy[0],enm2.xy[1],360,tiro_Inimigo2[i].raio,0,1,0);
+                //desenhaCirculo(enm1.xy[0],enm1.xy[1],360,tiro_Inimigo2[i].raio,0,1,0);
+            glPopMatrix();
+            //caminho que os tiros vao seguir
+           	tiro_Inimigo2[i].x += tiro_Inimigo2[i].speed*(tiro_Inimigo2[i].cosseno);
+          	tiro_Inimigo2[i].y += tiro_Inimigo2[i].speed*(tiro_Inimigo2[i].seno);
+          	//tiro_Inimigo[i].x += cos((tiro_Inimigo[i].cosseno) * M_PI / 180.0)*tiro_Inimigo[i].speed;
+          	//tiro_Inimigo[i].y += sin((tiro_Inimigo[i].seno) * M_PI / 180.0)*tiro_Inimigo[i].speed;
+          	//printf("caminnho em x do tiro %i =%f\n",i,tiro_Inimigo[i].x);
+          	//printf("caminnho em y do tiro %i =%f\n",i,tiro_Inimigo[i].y);
+
+  			remove_tiroInimigo2(i);
+        }
+    }
+    glutPostRedisplay();      
+}
+void cria_tiro_Inimigo3(void){
+
+    if(!tiro_Inimigo3.empty()){
+        for(int i = 0; i < tiro_Inimigo3.size(); i++){
+            glPushMatrix();
+                glTranslatef(tiro_Inimigo3[i].x, tiro_Inimigo3[i].y, 0);
+                desenhaCirculo(enm3.xy[0],enm3.xy[1],360,tiro_Inimigo3[i].raio,0,1,0);
+                //desenhaCirculo(enm1.xy[0],enm1.xy[1],360,tiro_Inimigo3[i].raio,0,1,0);
+            glPopMatrix();
+            //caminho que os tiros vao seguir
+           	tiro_Inimigo3[i].x += tiro_Inimigo3[i].speed*(tiro_Inimigo3[i].cosseno);
+          	tiro_Inimigo3[i].y += tiro_Inimigo3[i].speed*(tiro_Inimigo3[i].seno);
+
+  			remove_tiroInimigo3(i);
+        }
+    }
+    glutPostRedisplay();      
 }
 
 void mouse(int botao, int estado, int x, int y)
@@ -591,32 +658,63 @@ void cria_tiro(void){
     }
     glutPostRedisplay();      
 }
-
-void cria_tiro_Inimigo(void){
-
-    if(!tiro_Inimigo.empty()){
-        for(int i = 0; i < tiro_Inimigo.size(); i++){
-            glPushMatrix();
-                glTranslatef(tiro_Inimigo[i].x, tiro_Inimigo[i].y, 0);
-                desenhaCirculo(enm1.xy[0],enm1.xy[1],360,tiro_Inimigo[i].raio,0,1,0);
-            glPopMatrix();
-            //caminho que os tiros vao seguir
-           	tiro_Inimigo[i].x += 10;//tiro_Inimigo[i].speed*tiro_Inimigo[i].cosI;
-          	tiro_Inimigo[i].y += 10;//tiro_Inimigo[i].speed*tiro_Inimigo[i].senI;
-          	
-  			//remove_tiroInimigo(i);
-        }
-    }
-    glutPostRedisplay();      
+float distTiro(int oxPlayer, int oyPlayer){
+	return sqrt( (maior.xy[0] - (oxPlayer ))*(maior.xy[0] - (oxPlayer)) + 
+   (maior.xy[1] - (oyPlayer))*(maior.xy[1] - (oyPlayer  ) ));
 }
 
+/*float enemyIsNear (int xInimigo, int yInimigo, int oxPlayer, int oyPlayer){
+	return sqrt( (oxPlayer + dx - xInimigo )*(oxPlayer + dx - xInimigo ) +
+                (oyPlayer + dy - yInimigo)*(oyPlayer + dy - yInimigo) );
+}*/
+void remove_tiroInimigo(int i){
+
+	float distMin1 = menor.raio + tiro_Inimigo1[i].raio;
+	float distMax1 = maior.raio - tiro_Inimigo1[i].raio;
+
+	float tx1 = tiro_Inimigo1[i].x+enm1.xy[0];
+	float ty1 = tiro_Inimigo1[i].y+enm1.xy[1];
+	float distEnemy = tiro_Inimigo1[i].raio + enm1.raio;
+	if(inicio!=0){
+		if(distTiro(tx1,ty1) < distMin1 || distTiro(tx1,ty1) > distMax1)
+			tiro_Inimigo1.erase(tiro_Inimigo1.begin()+i);
+			
+	}	
+}
+void remove_tiroInimigo2(int i){
+
+	float distMin2 = menor.raio + tiro_Inimigo2[i].raio;
+	float distMax2 = maior.raio - tiro_Inimigo2[i].raio;
+
+	float tx2 = tiro_Inimigo2[i].x+enm2.xy[0];
+	float ty2 = tiro_Inimigo2[i].y+enm2.xy[1];
+
+	
+	if(inicio!=0){
+		if(distTiro(tx2,ty2) < distMin2 || distTiro(tx2,ty2) > distMax2)
+			tiro_Inimigo2.erase(tiro_Inimigo2.begin()+i);
+	
+	}	
+}
+void remove_tiroInimigo3(int i){
+
+	float distMin3 = menor.raio + tiro_Inimigo3[i].raio;
+	float distMax3 = maior.raio - tiro_Inimigo3[i].raio;
+
+	float tx3 = tiro_Inimigo3[i].x+enm3.xy[0];
+	float ty3 = tiro_Inimigo3[i].y+enm3.xy[1];
+	if(inicio!=0){
+		if(distTiro(tx3,ty3) < distMin3 || distTiro(tx3,ty3) > distMax3)
+			tiro_Inimigo3.erase(tiro_Inimigo3.begin()+i);
+	}	
+}
 void remove_tiro(int i){
 
 	float distMin = menor.raio + tiros[i].raio;
 	float distMax = maior.raio - tiros[i].raio;
 	float distEnemy = tiros[i].raio + enm1.raio;
 
-	float tx = tiros[i].x+player.xy[0] -dx;
+	float tx = tiros[i].x+player.xy[0]-dx;
 	float ty = tiros[i].y+player.xy[1]-dy;
 	if(inicio!=0){
 		if(distPlayer(tx,ty) < distMin || distPlayer(tx,ty) > distMax)
@@ -639,24 +737,13 @@ void remove_tiro(int i){
 	}
 }
 
-void remove_tiroInimigo(int i){
-
-	float distMin = menor.raio + tiro_Inimigo[i].raio;
-	float distMax = maior.raio - tiro_Inimigo[i].raio;
-	float distEnemy = tiro_Inimigo[i].raio + enm1.raio;
-
-	float tx = tiro_Inimigo[i].x+enm1.xy[0];
-	float ty = tiro_Inimigo[i].y+enm1.xy[1];
-	
-	if(inicio!=0){
-		if(distPlayer(tx,ty) < distMin || distPlayer(tx,ty) > distMax)
-			tiro_Inimigo.erase(tiro_Inimigo.begin()+i);
-	}
-	
-}
-
 void contaVoltas(){
-	if( (player.xy[1]+dy > maior.xy[1]) && (player.xy[0]+dx < maior.xy[0]) &&sqm[0]==0){
+	
+	if((player.xy[1]+dy > maior.xy[1]) && ( (player.xy[0]+dx > (maior.xy[0]))&& (player.xy[0]+dx < maior.xy[0]+5) )){
+		flagmalandro=1;
+		printf("%i\n Glu Glu yeh yeh\n",flagmalandro);
+	}
+	else if( (player.xy[1]+dy > maior.xy[1]) && (player.xy[0]+dx < maior.xy[0]) && sqm[0]==0 && flagmalandro==1){
 		sqm[0]=1;
 		printf("\n flag 0 ativo com %i \n",sqm[0]);
 	}else if ( (player.xy[1]+dy < maior.xy[1])  &&  (player.xy[0]+dx < maior.xy[0]) && sqm[0]==1 && sqm[1]==0){
@@ -672,13 +759,13 @@ void contaVoltas(){
 		for(int i=0;i<3;i++)
 				sqm[i]=0;
 	}else if ( (player.xy[1]+dy > maior.xy[1])  &&  (player.xy[0]+dx > maior.xy[0]) && (sqm[0]==1 || sqm[1]==1 || sqm[2]==1) ){
+		flagmalandro=0;
 		for(int i=0;i<3;i++)
 				sqm[i]=0;
-		printf("\n Valor do Flag 0 retado pra %i \n",sqm[0]);
-		printf("\n Valor do Flag 1 retado pra %i \n",sqm[1]);
-		printf("\n Valor do Flag 2 retado pra %i \n",sqm[2]);
+		printf("\n Valor do Flag 0 resetado pra %i \n",sqm[0]);
+		printf("\n Valor do Flag 1 resetado pra %i \n",sqm[1]);
+		printf("\n Valor do Flag 2 resetado pra %i \n",sqm[2]);
 	}
-	
 
 
 
@@ -732,9 +819,11 @@ void Timer(int value)
 		glutTimerFunc(20000,Timer, 1);
 	}
 	if(value == 2){
-		tiro_Inimigo.push_back(novo_tiro_Inimigo());
+		tiro_Inimigo1.push_back(novo_tiro_Inimigo1());
+		tiro_Inimigo2.push_back(novo_tiro_Inimigo2());
+		tiro_Inimigo3.push_back(novo_tiro_Inimigo3());
 		glutPostRedisplay();
-		glutTimerFunc(331,Timer, 2);
+		glutTimerFunc(1500,Timer, 2);
 	}
 	if(value == 3){
 		moveInimigo();
@@ -748,10 +837,6 @@ float distEnem(int ox, int oy){
 	return sqrt( (maior.xy[0] - ox )*(maior.xy[0] - ox ) + (maior.xy[1] - oy)*(maior.xy[1] - oy ) );
 }
 
-
-float distEnem_Player(int ox, int oy){
-	return sqrt( (player.xy[0] - ox )*(player.xy[0] - ox ) + (player.xy[1] - oy)*(player.xy[1] - oy ) );
-}
 
 void moveInimigo(){
 
