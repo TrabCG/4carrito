@@ -21,8 +21,6 @@ void init()
 	printf("\nTodos os comandos funcionam tanto para a tela inicial quanto dentro da arena\n");
 	printf("\n--------------Para movimentar o Carrito é só usar W A S D-------------------\n");
 	printf("\n--------Para atirar com o carrito é so clicar na direção desejada-----------\n");
-	printf("\n--Para testar as telas de GG ou de derrota é so manter pressionado G ou L---\n");
-	printf("\n--------------------Para testar o placar é so presionar V-------------------\n");
 	printf("\n----------------------------------------------------------------------------\n");
     //Selecionar cor de fundo preto
     	//glMatrixMode(GL_PROJECTION);
@@ -878,9 +876,10 @@ void Timer(int value)
 		glutTimerFunc(20000,Timer, 1);
 	}
 	if(value == 2){
-		tiro_Inimigo1.push_back(novo_tiro_Inimigo1());
-		tiro_Inimigo2.push_back(novo_tiro_Inimigo2());
-		tiro_Inimigo3.push_back(novo_tiro_Inimigo3());
+
+		if(flagEnemy[0] ==0) tiro_Inimigo1.push_back(novo_tiro_Inimigo1());
+		if(flagEnemy[1] ==0) tiro_Inimigo2.push_back(novo_tiro_Inimigo2());
+		if(flagEnemy[2] ==0) tiro_Inimigo3.push_back(novo_tiro_Inimigo3());
 		glutPostRedisplay();
 		glutTimerFunc(freqTiroEnemy,Timer, 2);
 	}

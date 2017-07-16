@@ -22,20 +22,23 @@ void parseXML(char* argv){
         pathSVG = Arena->Attribute("caminho");
         tipoSVG = Arena->Attribute("tipo");
 
-				TiXmlElement* son = Arena->NextSiblingElement("carro");
-				const char* attr;
-				attr = son->Attribute("velTiro");
-				velTiro = atof(attr);
-                /*
+		TiXmlElement* son = Arena->NextSiblingElement("carro");
+		const char* attr;
+		attr = son->Attribute("velTiro");
+		velTiro = atof(attr);
+        
 //<inimigo freqTiro="0.0001" velInimigo="0.1" velTiro="0.3"></inimigo>
-                TiXmlElement* Enemy = inimigo->NextSiblingElement("inimigo");
-                attr = Enemy->Attribute("freqTiro");
-                freqTiroEnemy = atof(attr);
-                attr = Enemy->Attribute("velInimigo");
-                velEnemy = atof(attr);
-                attr = Enemy->Attribute("velTiro");
-                velTiroEnemy = atof(attr);
-                */
+
+        TiXmlElement* Enemy = son->NextSiblingElement("inimigo");
+        attr = Enemy->Attribute("freqTiro");
+        freqTiroEnemy = atof(attr);
+        attr = Enemy->Attribute("velInimigo");
+        passoEnm[0] = atof(attr);
+        passoEnm[1] = atof(attr);
+        passoEnm[2] = atof(attr);
+        attr = Enemy->Attribute("velTiro");
+        velTiroEnemy = atof(attr);
+                
         strcat(pathsvg, pathSVG);
         strcat(pathsvg, nomeSVG);
         strcat(pathsvg, ".");
