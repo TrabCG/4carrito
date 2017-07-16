@@ -7,6 +7,8 @@
 #include <vector>
 #include <cmath>
 #include <stdlib.h>
+#include "include/irrKlang.h"
+#pragma comment(lib, "irrKlang.lib")
 
 
 typedef struct{
@@ -51,8 +53,10 @@ std::vector<tiro> tiro_Inimigo3;
 circ maior, menor, enm1, enm2, enm3, player;
 car carrito;
 quad rect;
-
-
+int tocaintro=-1;
+int tocajogo=-1;
+int tocafim=-1;
+int gamb=0;
 int flagEnemy[3];
 int numVoltas = 0;
 float frlR;
@@ -70,7 +74,9 @@ char pathsvg[300];
 const char *corCirExt, *corCirInt, *corPlayer, *corLargada, *corEnm1, *corEnm2, *corEnm3;
 
 bool teclas[256];
-
+float freqTiroEnemy=0;
+float velTiroEnemy=0;
+float velEnemy=0;
 float dx = player.xy[0];
 float dy = player.xy[1];
 int inicio =0;
@@ -82,7 +88,7 @@ int angCarro = -90;
 int angCan = -90;
 int reseta =0;
 int passo = 10;
-int passoEnm[3] = {1,1,1};
+int passoEnm[3] = {velEnemy,velEnemy,velEnemy};
 int xIni = 0;
 int flagmalandro=0;
 void init();
@@ -119,7 +125,7 @@ void resetaPosCarrito(void);
 void moveInimigo();
 float distEnem(int ox, int oy);
 float distEnem_Player(int ox, int oy);
-void teste(void);
 float distTiro(int oxPlayer, int oyPlayer);
 void remove_tiroInimigo2(int i);
 void remove_tiroInimigo3(int i);
+void efeitosonoro(void);

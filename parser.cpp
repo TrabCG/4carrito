@@ -16,7 +16,8 @@ void parseXML(char* argv){
     }else{
         TiXmlElement* root = doc.FirstChildElement();
         TiXmlElement* Arena = root->FirstChildElement("arquivoDaArena");
-
+        TiXmlElement* inimigo = Arena->FirstChildElement("arquivoDaArena");
+        
         nomeSVG = Arena->Attribute("nome");
         pathSVG = Arena->Attribute("caminho");
         tipoSVG = Arena->Attribute("tipo");
@@ -25,7 +26,16 @@ void parseXML(char* argv){
 				const char* attr;
 				attr = son->Attribute("velTiro");
 				velTiro = atof(attr);
-
+                /*
+//<inimigo freqTiro="0.0001" velInimigo="0.1" velTiro="0.3"></inimigo>
+                TiXmlElement* Enemy = inimigo->NextSiblingElement("inimigo");
+                attr = Enemy->Attribute("freqTiro");
+                freqTiroEnemy = atof(attr);
+                attr = Enemy->Attribute("velInimigo");
+                velEnemy = atof(attr);
+                attr = Enemy->Attribute("velTiro");
+                velTiroEnemy = atof(attr);
+                */
         strcat(pathsvg, pathSVG);
         strcat(pathsvg, nomeSVG);
         strcat(pathsvg, ".");
@@ -53,10 +63,10 @@ void parseSVG(char* argv){
 //------circulo externo-----
 
 
-				TiXmlElement* son = root->FirstChildElement();//circle
+		TiXmlElement* son = root->FirstChildElement();//circle
         const char* attr;
 				//x circulo externo
-		    attr = son->Attribute("cx");
+	    attr = son->Attribute("cx");
         maior.xy[0] = atof(attr);
         //y circulo externo
         attr = son->Attribute("cy");

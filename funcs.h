@@ -1,7 +1,13 @@
 //#include "var.cpp"
 
 
-
+irrklang::ISoundEngine* intro = irrklang::createIrrKlangDevice();
+irrklang::ISoundEngine* jogo = irrklang::createIrrKlangDevice();
+irrklang::ISoundEngine* tiroP = irrklang::createIrrKlangDevice();
+irrklang::ISoundEngine* faleceu = irrklang::createIrrKlangDevice();
+irrklang::ISoundEngine* explosao = irrklang::createIrrKlangDevice();
+irrklang::ISoundEngine* ggwp = irrklang::createIrrKlangDevice();
+irrklang::ISoundEngine* volta = irrklang::createIrrKlangDevice();
 void init()
 {
 	float left = maior.xy[0]-maior.raio;
@@ -28,6 +34,7 @@ void init()
         	teclas[i]=0;
      	for (int i =0;i<3;i++)
         	flagEnemy[i]=0;
+        
 }
 
 
@@ -35,7 +42,6 @@ void display(){
 
 	glClear( GL_COLOR_BUFFER_BIT );
 	keyOperations();
-	teste();
 	if (inicio ==0){
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		//glPushMatrix();
@@ -74,22 +80,36 @@ void display(){
 		glPopMatrix();
 		//desenhaCarrito();
 		// Exibe o desenha na janela
-		
+		if (tocaintro==-1){
+				intro->play2D("audio/TopGearIntro.mp3", true);
+				tocaintro=0;
+			}
 		cria_tiro();
 		if(teclas[13]==true){
 			inicio=1;
 			reseta=0;
+			tocaintro=1;
+			efeitosonoro();
 		}
 		//glutSwapBuffers();
 		//glutPostRedisplay();
 	}else if(fim==1){
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		tocajogo=1;
+		if(gamb==0){
+			efeitosonoro();
+			gamb=1;
+		}
 		glColor3f(1,0,0);
 		glPushMatrix();
-		glTranslatef(menor.xy[0]-180,maior.xy[1],0);
+		glTranslatef(menor.xy[0]-70,maior.xy[1],0);
 	    glScalef(0.6, 0.6, 0.6);
-		DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Se Fodeu!");
+		DesenhaTextoStroke(GLUT_STROKE_ROMAN,"R.I.P");
 		glPopMatrix();
+		if (tocafim==-1){
+			faleceu->play2D("audio/darkness.mp3",true);
+			tocafim=0;
+		}
 		//fim=0;
 	}else if(win==1){
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -99,9 +119,25 @@ void display(){
 	    glScalef(0.6, 0.6, 0.6);
 		DesenhaTextoStroke(GLUT_STROKE_ROMAN,"GGWP FION!");
 		glPopMatrix();
+		glPushMatrix();
+			glColor3f(1,0,0);
+			 // diminui o tamanho do fonte
+			//glRotatef(15, 0,0,1); // rotaciona o texto
+			//glRasterPos2f(menor.xy[0]-(1*menor.raio),maior.xy[1]-maior.raio+30); 
+		    glTranslatef(menor.xy[0]-180,maior.xy[1]-maior.raio+30,0);
+		    glScalef(0.2, 0.2, 0.2);
+			DesenhaTextoStroke(GLUT_STROKE_ROMAN,"Aperte ENTER para sair !");
+		glPopMatrix();
+		if(teclas[13]==true)
+			exit(0);
+		
 		//win=0;
 	}else if(inicio !=0 && fim ==0 && win ==0){
 	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+	if (tocajogo==-1){
+			jogo->play2D("audio/topgear1.mp3", true);
+			tocajogo=0;
+		}
 	//placar que marca a quantidade de voltas que o fodendo player deu
 	glPushMatrix();
 			glTranslatef((maior.xy[0]-maior.raio)+20,(maior.xy[1]+maior.raio)-40,0);
@@ -143,7 +179,7 @@ void display(){
 	desenhaCirculo(menor.xy[0],menor.xy[1],360,menor.raio,menor.rgb[0],menor.rgb[1],menor.rgb[2]);
 
 //// fodendo gamb pra contar voltas
-
+/*
 	glPushMatrix();
 			glTranslatef(menor.xy[0],menor.raio+menor.xy[1],0);
 			desenhaQuadrilatero(maior.raio-menor.raio,5,0,1,0);
@@ -156,7 +192,7 @@ void display(){
 			glTranslatef(menor.xy[0],menor.xy[1]-(2.33*menor.raio),0);
 			desenhaQuadrilatero(maior.raio-menor.raio,5,0,1,0);
 	glPopMatrix();
-
+*/
 ////////linha de largada
 	glPushMatrix();
 		glTranslatef(rect.xy[0] + rect.largura/2,rect.xy[1],0 );
@@ -171,9 +207,9 @@ void display(){
 
 	glPopMatrix();
 	cria_tiro();
-	cria_tiro_Inimigo1();
-	cria_tiro_Inimigo2();
-	cria_tiro_Inimigo3();
+	//cria_tiro_Inimigo1();
+	//cria_tiro_Inimigo2();
+	//cria_tiro_Inimigo3();
 ////////"inimigos"
 	if (flagEnemy[0]==0)
 		desenhaCirculo(enm1.xy[0],enm1.xy[1],360,enm1.raio,enm1.rgb[0],enm1.rgb[1],enm1.rgb[2]);
@@ -182,18 +218,16 @@ void display(){
 	if (flagEnemy[2]==0)
 		desenhaCirculo(enm3.xy[0],enm3.xy[1],360,enm3.raio,enm3.rgb[0],enm3.rgb[1],enm3.rgb[2]);
 }	
+
 	glutSwapBuffers();
 }
 
-void teste(){
-	/*if(teclas['i']==true)
-		inicio=0;
-	if(teclas['g']==true)
-		win=1;
-	if(teclas['l']==true)
-		fim=1;		
-	if(teclas['v']==true)
-		numVoltas+=1;*/}
+void efeitosonoro(){
+	if (tocaintro==1)
+		intro->drop();
+	if (tocajogo==1)
+		jogo->drop();
+}
 void resetaPosCarrito(){
 	 dx = 0;
 	 dy = 0;
@@ -375,6 +409,8 @@ void keyOperations (void) {
 
 	float dCos =cos(((angCarro*M_PI)/180.0));
 	float dSin =sin(((angCarro*M_PI)/180.0));
+	if(teclas['v']==true)
+		numVoltas++;
 	if(inicio==0){
 		if (teclas['w']==true || teclas['W']==true){
 			dx-=6*dCos;
@@ -540,7 +576,7 @@ float distEnem_Player(int ox, int oy){
 }
 tiro novo_tiro_Inimigo1(void){
     tiro t;
-	t.speed = velTiro;
+	t.speed = velTiroEnemy;
 	t.raio = player.raio*1/10;
 	t.r = distEnem_Player(enm1.xy[0],enm1.xy[1]);
 	t.cosseno = ((player.xy[0]+dx) - enm1.xy[0]) / t.r;
@@ -549,7 +585,7 @@ tiro novo_tiro_Inimigo1(void){
 }
 tiro novo_tiro_Inimigo2(void){
     tiro t;
-	t.speed = velTiro;
+	t.speed = velTiroEnemy;
 	t.raio = player.raio*1/10;
 	t.r = distEnem_Player(enm2.xy[0],enm2.xy[1]);
 	t.cosseno = ((player.xy[0]+dx) - enm2.xy[0]) / t.r;
@@ -558,7 +594,7 @@ tiro novo_tiro_Inimigo2(void){
 }
 tiro novo_tiro_Inimigo3(void){
     tiro t;
-	t.speed = velTiro;
+	t.speed = velTiroEnemy;
 	t.raio = player.raio*1/10;
 	t.r = distEnem_Player(enm3.xy[0],enm3.xy[1]);
 	t.cosseno = ((player.xy[0]+dx) - enm3.xy[0]) / t.r;
@@ -636,6 +672,7 @@ void mouse(int botao, int estado, int x, int y)
 		switch(estado){
 			case GLUT_DOWN:
 				tiros.push_back(novo_tiro());
+				tiroP->play2D("audio/canhao.mp3");
 				break;
 		}
 	}
@@ -652,7 +689,7 @@ void cria_tiro(void){
             //caminho que os tiros vao seguir
           	tiros[i].x += cos((tiros[i].angulo) * M_PI / 180.0)*tiros[i].speed;
           	tiros[i].y += sin((tiros[i].angulo) * M_PI / 180.0)*tiros[i].speed;
-
+          	
 			remove_tiro(i);
         }
     }
@@ -674,11 +711,15 @@ void remove_tiroInimigo(int i){
 
 	float tx1 = tiro_Inimigo1[i].x+enm1.xy[0];
 	float ty1 = tiro_Inimigo1[i].y+enm1.xy[1];
-	float distEnemy = tiro_Inimigo1[i].raio + enm1.raio;
+	float distPlayer = tiro_Inimigo1[i].raio + player.raio;
 	if(inicio!=0){
 		if(distTiro(tx1,ty1) < distMin1 || distTiro(tx1,ty1) > distMax1)
 			tiro_Inimigo1.erase(tiro_Inimigo1.begin()+i);
-			
+		if(distEnem_Player(tx1,ty1)<distPlayer){
+			tiro_Inimigo1.erase(tiro_Inimigo1.begin()+i);
+			explosao->play2D("audio/Carroexplode.wav");
+			fim=1;		
+		}
 	}	
 }
 void remove_tiroInimigo2(int i){
@@ -688,11 +729,16 @@ void remove_tiroInimigo2(int i){
 
 	float tx2 = tiro_Inimigo2[i].x+enm2.xy[0];
 	float ty2 = tiro_Inimigo2[i].y+enm2.xy[1];
-
+	float distPlayer = tiro_Inimigo1[i].raio + player.raio;
 	
 	if(inicio!=0){
 		if(distTiro(tx2,ty2) < distMin2 || distTiro(tx2,ty2) > distMax2)
 			tiro_Inimigo2.erase(tiro_Inimigo2.begin()+i);
+		if(distEnem_Player(tx2,ty2)<distPlayer){
+			tiro_Inimigo2.erase(tiro_Inimigo2.begin()+i);
+			explosao->play2D("audio/Carroexplode.wav");
+			fim=1;		
+		}
 	
 	}	
 }
@@ -703,9 +749,15 @@ void remove_tiroInimigo3(int i){
 
 	float tx3 = tiro_Inimigo3[i].x+enm3.xy[0];
 	float ty3 = tiro_Inimigo3[i].y+enm3.xy[1];
+	float distPlayer = tiro_Inimigo1[i].raio + player.raio;
 	if(inicio!=0){
 		if(distTiro(tx3,ty3) < distMin3 || distTiro(tx3,ty3) > distMax3)
 			tiro_Inimigo3.erase(tiro_Inimigo3.begin()+i);
+		if(distEnem_Player(tx3,ty3)<distPlayer){
+			tiro_Inimigo3.erase(tiro_Inimigo3.begin()+i);
+			explosao->play2D("audio/Carroexplode.wav");
+			fim=1;		
+		}
 	}	
 }
 void remove_tiro(int i){
@@ -722,23 +774,25 @@ void remove_tiro(int i){
 		if(flagEnemy[0]==0)
 			if(enemyIsNear(enm1.xy[0],enm1.xy[1],tx,ty) < distEnemy){
 				tiros.erase(tiros.begin()+i);
+				explosao->play2D("audio/Carroexplode.wav");
 				flagEnemy[0]=1;
 		}
 		if(flagEnemy[1]==0)
 			if(enemyIsNear(enm2.xy[0],enm2.xy[1],tx,ty) < distEnemy){
 				tiros.erase(tiros.begin()+i);
+				explosao->play2D("audio/Carroexplode.wav");
 				flagEnemy[1]=1;
 		}
 		if(flagEnemy[2]==0)		
 			if(enemyIsNear(enm3.xy[0],enm3.xy[1],tx,ty) < distEnemy){
 				tiros.erase(tiros.begin()+i);
+				explosao->play2D("audio/Carroexplode.wav");
 				flagEnemy[2]=1;
 		}
 	}
 }
 
 void contaVoltas(){
-	
 	if((player.xy[1]+dy > maior.xy[1]) && ( (player.xy[0]+dx > (maior.xy[0]))&& (player.xy[0]+dx < maior.xy[0]+5) )){
 		flagmalandro=1;
 		printf("%i\n Glu Glu yeh yeh\n",flagmalandro);
@@ -754,8 +808,13 @@ void contaVoltas(){
 		printf("\n flag 2 ativo com %i \n",sqm[2]);
 	}else if ( (player.xy[1]+dy > maior.xy[1])  &&  (player.xy[0]+dx > maior.xy[0]) && sqm[0]==1 && sqm[1]==1 && sqm[2]==1){
 		numVoltas+=1;
-		if(numVoltas==5)
+		volta->play2D("audio/aplauso.wav");
+		if(numVoltas>=5){
 			win=1;
+			ggwp->play2D("audio/ggwp.mp3");
+			tocajogo=1;
+			efeitosonoro();
+		}
 		for(int i=0;i<3;i++)
 				sqm[i]=0;
 	}else if ( (player.xy[1]+dy > maior.xy[1])  &&  (player.xy[0]+dx > maior.xy[0]) && (sqm[0]==1 || sqm[1]==1 || sqm[2]==1) ){
@@ -823,7 +882,7 @@ void Timer(int value)
 		tiro_Inimigo2.push_back(novo_tiro_Inimigo2());
 		tiro_Inimigo3.push_back(novo_tiro_Inimigo3());
 		glutPostRedisplay();
-		glutTimerFunc(1500,Timer, 2);
+		glutTimerFunc(freqTiroEnemy,Timer, 2);
 	}
 	if(value == 3){
 		moveInimigo();
